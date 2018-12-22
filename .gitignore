@@ -1,0 +1,9 @@
+.idea/
+local_env
+.local_producerrc
+pics/
+target/
+.DS_Store
+pom.xml.releaseBackup
+release.properties
+aliyun-log-producer-sample.iml
