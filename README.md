@@ -18,12 +18,12 @@
 mvn clean package
 ```
 
-执行以下命令执行使用 callback 的样例。
+编译完成后，执行以下命令执行使用 callback 的样例。
 ```
 mvn exec:java -Dexec.mainClass="com.aliyun.openservices.aliyun.log.producer.sample.SampleProducerWithCallback"
 ```
 
-执行以下命令执行使用 future 的样例。
+编译完成后，执行以下命令执行使用 future 的样例。
 ```
 mvn exec:java -Dexec.mainClass="com.aliyun.openservices.aliyun.log.producer.sample.SampleProducerWithFuture"
 ```
