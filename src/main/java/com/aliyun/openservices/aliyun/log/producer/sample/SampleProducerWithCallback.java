@@ -79,14 +79,9 @@ public class SampleProducerWithCallback {
         public void onCompletion(Result result) {
             try {
                 if (result.isSuccessful()) {
-                    LOGGER.info("Send log successfully, logItem={}", logItem.ToJsonString());
+                    LOGGER.info("Send log successfully, logItem=" + logItem.ToJsonString());
                 } else {
-                    LOGGER.error(
-                            "Failed to send log, logItem={}, errorCode={}, errorMessage={}, attemptCount={}",
-                            logItem.ToJsonString(),
-                            result.getErrorCode(),
-                            result.getErrorMessage(),
-                            result.getAttempts().size());
+                    LOGGER.error("Failed to send log, result=" + result);
                 }
             } finally {
                 completed.getAndIncrement();

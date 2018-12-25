@@ -66,7 +66,7 @@ public class SampleProducerWithFuture {
 
         @Override
         public void onSuccess(@Nullable Result result) {
-            LOGGER.info("Send log successfully, logItem={}", logItem.ToJsonString());
+            LOGGER.info("Send log successfully, project={}, logStore={}, logItem={}", result.getProject(), result.getLogStore(), logItem.ToJsonString());
             completed.getAndIncrement();
         }
 
@@ -74,12 +74,7 @@ public class SampleProducerWithFuture {
         public void onFailure(Throwable t) {
             if (t instanceof ResultFailedException) {
                 Result result = ((ResultFailedException) t).getResult();
-                LOGGER.error(
-                        "Failed to send log, logItem={}, errorCode={}, errorMessage={}, attemptCount={}",
-                        logItem.ToJsonString(),
-                        result.getErrorCode(),
-                        result.getErrorMessage(),
-                        result.getAttempts().size());
+                LOGGER.error("Failed to send log, result=" + result);
             }
             completed.getAndIncrement();
         }
