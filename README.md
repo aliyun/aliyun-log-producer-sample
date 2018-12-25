@@ -1,5 +1,9 @@
 # Aliyun LOG Java Producer 应用示例
 
+[![License](https://img.shields.io/badge/license-Apache2.0-blue.svg)](/LICENSE)
+
+[README in English](/README.md)
+
 ## 前提条件
 您需要准备好以下内容：
 * 开通[日志服务](https://cn.aliyun.com/product/sls)，创建好用于存放数据的 project、logStore。
