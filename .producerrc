@@ -1,0 +1,5 @@
+export PROJECT=
+export ENDPOINT=
+export ACCESS_KEY_ID=
+export ACCESS_KEY_SECRET=
+export LOG_STORE=
