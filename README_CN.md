@@ -4,6 +4,8 @@
 
 [README in English](/README.md)
 
+本 repo 提供了使用 [Aliyun LOG Java Producer](https://github.com/aliyun/aliyun-log-producer) 的样例程序，有助于快速上手 producer library。
+
 ## 前提条件
 您需要准备好以下内容：
 * 开通[日志服务](https://cn.aliyun.com/product/sls)，创建好用于存放数据的 project、logStore。
