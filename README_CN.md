@@ -49,6 +49,8 @@ mvn exec:java -Dexec.mainClass="com.aliyun.openservices.aliyun.log.producer.samp
 mvn exec:java -Dexec.mainClass="com.aliyun.openservices.aliyun.log.producer.sample.SampleProducerWithFuture"
 ```
 
-
+## 相关资料
+* [日志上云利器 - Aliyun LOG Java Producer](https://yq.aliyun.com/articles/682762)
+* [Aliyun LOG Java Producer 快速入门](https://yq.aliyun.com/articles/682761)
 
 
