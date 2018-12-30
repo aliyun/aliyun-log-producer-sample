@@ -2,10 +2,9 @@ package com.aliyun.openservices.aliyun.log.producer.sample;
 
 import com.aliyun.openservices.aliyun.log.producer.*;
 import com.aliyun.openservices.log.common.LogItem;
+import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Random;
 
 public class Utils {
 
@@ -40,7 +39,6 @@ public class Utils {
     logItem.PushBack("key1", generateStr(10));
     logItem.PushBack("key2", generateStr(10));
     return logItem;
-
   }
 
   private static String generateStr(int len) {
@@ -64,5 +62,4 @@ public class Utils {
   public static String getSource() {
     return "source-" + RANDOM.nextInt(10);
   }
-
 }

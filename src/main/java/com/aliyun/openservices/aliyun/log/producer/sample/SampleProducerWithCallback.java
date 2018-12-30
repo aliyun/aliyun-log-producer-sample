@@ -7,13 +7,12 @@ import com.aliyun.openservices.aliyun.log.producer.errors.LogsTooLargeException;
 import com.aliyun.openservices.aliyun.log.producer.errors.ProducerException;
 import com.aliyun.openservices.aliyun.log.producer.errors.TimeoutException;
 import com.aliyun.openservices.log.common.LogItem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SampleProducerWithCallback {
 
@@ -35,36 +34,38 @@ public class SampleProducerWithCallback {
     final CountDownLatch latch = new CountDownLatch(nTask);
 
     for (int i = 0; i < nTask; ++i) {
-      EXECUTOR_SERVICE.submit(new Runnable() {
-        @Override
-        public void run() {
-          LogItem logItem = Utils.generateLogItem(sequenceNumber.getAndIncrement());
-          try {
-            String project = System.getenv("PROJECT");
-            String logStore = System.getenv("LOG_STORE");
-            producer.send(
-                project,
-                logStore,
-                Utils.getTopic(),
-                Utils.getSource(),
-                logItem,
-                new SampleCallback(project, logStore, logItem, completed));
-          } catch (InterruptedException e) {
-            LOGGER.warn("The current thread has been interrupted during send logs.");
-          } catch (Exception e) {
-            if (e instanceof LogsTooLargeException) {
-              LOGGER.error("The size of log is larger than the maximum allowable size, e={}", e);
-            } else if (e instanceof TimeoutException) {
-              LOGGER.error("The time taken for allocating memory for the logs has surpassed., e={}",
-                  e);
-            } else {
-              LOGGER.error("Failed to send log, logItem={}, e=", logItem, e);
+      EXECUTOR_SERVICE.submit(
+          new Runnable() {
+            @Override
+            public void run() {
+              LogItem logItem = Utils.generateLogItem(sequenceNumber.getAndIncrement());
+              try {
+                String project = System.getenv("PROJECT");
+                String logStore = System.getenv("LOG_STORE");
+                producer.send(
+                    project,
+                    logStore,
+                    Utils.getTopic(),
+                    Utils.getSource(),
+                    logItem,
+                    new SampleCallback(project, logStore, logItem, completed));
+              } catch (InterruptedException e) {
+                LOGGER.warn("The current thread has been interrupted during send logs.");
+              } catch (Exception e) {
+                if (e instanceof LogsTooLargeException) {
+                  LOGGER.error(
+                      "The size of log is larger than the maximum allowable size, e={}", e);
+                } else if (e instanceof TimeoutException) {
+                  LOGGER.error(
+                      "The time taken for allocating memory for the logs has surpassed., e={}", e);
+                } else {
+                  LOGGER.error("Failed to send log, logItem={}, e=", logItem, e);
+                }
+              } finally {
+                latch.countDown();
+              }
             }
-          } finally {
-            latch.countDown();
-          }
-        }
-      });
+          });
     }
     latch.await();
     EXECUTOR_SERVICE.shutdown();
@@ -82,7 +83,7 @@ public class SampleProducerWithCallback {
     LOGGER.info("All log complete, completed={}", completed.get());
   }
 
-  final private static class SampleCallback implements Callback {
+  private static final class SampleCallback implements Callback {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SampleCallback.class);
 
@@ -107,15 +108,16 @@ public class SampleProducerWithCallback {
         if (result.isSuccessful()) {
           LOGGER.info("Send log successfully.");
         } else {
-          LOGGER
-              .error("Failed to send log, project={}, logStore={}, logItem={}, result={}", project,
-                  logStore, logItem.ToJsonString(), result);
+          LOGGER.error(
+              "Failed to send log, project={}, logStore={}, logItem={}, result={}",
+              project,
+              logStore,
+              logItem.ToJsonString(),
+              result);
         }
       } finally {
         completed.getAndIncrement();
       }
     }
   }
-
-
 }
