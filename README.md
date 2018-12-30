@@ -4,6 +4,8 @@
 
 [中文版 README](/README_CN.md)
 
+This repo provides the sample application for [Aliyun LOG Java Producer](https://github.com/aliyun/aliyun-log-producer/blob/master/README_EN.md), it will help you to master the producer library more quickly.
+
 ## Prerequisite
 You will need the following:
 * Opening [Aliyun Log Service](https://www.alibabacloud.com/product/log-service) and create target project, logstore in advancce.
