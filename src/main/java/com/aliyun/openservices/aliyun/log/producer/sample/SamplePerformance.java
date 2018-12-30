@@ -114,7 +114,7 @@ public class SamplePerformance {
     LOGGER.info("Test end.");
     LOGGER.info("======Summary======");
     long totalSizeInBytes = (long) sendThreadCount * times * logsCountInSend * logSizeInBytes;
-    LOGGER.info("Total count " + successCount.get() + ".");
+    LOGGER.info("Total count " + sendThreadCount * times * logsCountInSend + ".");
     LOGGER.info("Total size " + totalSizeInBytes + " bytes.");
     long timeCost = t2 - t1;
     LOGGER.info("Time cost " + timeCost + " millis");
