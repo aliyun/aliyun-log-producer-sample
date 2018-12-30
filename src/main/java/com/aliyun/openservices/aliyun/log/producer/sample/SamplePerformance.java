@@ -44,6 +44,7 @@ public class SamplePerformance {
     ExecutorService executorService = Executors.newFixedThreadPool(sendThreadCount);
     int logSizeInBytes = LogSizeCalculator.calculate(getLogItem());
     LOGGER.info("logSizeInBytes={}", logSizeInBytes);
+    LOGGER.info("availableProcessors={}", Runtime.getRuntime().availableProcessors());
 
     ProjectConfigs projectConfigs = new ProjectConfigs();
     projectConfigs.put(new ProjectConfig(project, endpoint, accessKeyId, accessKeySecret));
