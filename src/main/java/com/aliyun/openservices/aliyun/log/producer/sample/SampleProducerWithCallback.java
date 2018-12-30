@@ -3,7 +3,7 @@ package com.aliyun.openservices.aliyun.log.producer.sample;
 import com.aliyun.openservices.aliyun.log.producer.Callback;
 import com.aliyun.openservices.aliyun.log.producer.Producer;
 import com.aliyun.openservices.aliyun.log.producer.Result;
-import com.aliyun.openservices.aliyun.log.producer.errors.LogsTooLargeException;
+import com.aliyun.openservices.aliyun.log.producer.errors.LogSizeTooLargeException;
 import com.aliyun.openservices.aliyun.log.producer.errors.ProducerException;
 import com.aliyun.openservices.aliyun.log.producer.errors.TimeoutException;
 import com.aliyun.openservices.log.common.LogItem;
@@ -52,7 +52,7 @@ public class SampleProducerWithCallback {
               } catch (InterruptedException e) {
                 LOGGER.warn("The current thread has been interrupted during send logs.");
               } catch (Exception e) {
-                if (e instanceof LogsTooLargeException) {
+                if (e instanceof LogSizeTooLargeException) {
                   LOGGER.error(
                       "The size of log is larger than the maximum allowable size, e={}", e);
                 } else if (e instanceof TimeoutException) {

@@ -1,7 +1,7 @@
 package com.aliyun.openservices.aliyun.log.producer.sample;
 
 import com.aliyun.openservices.aliyun.log.producer.*;
-import com.aliyun.openservices.aliyun.log.producer.errors.LogsTooLargeException;
+import com.aliyun.openservices.aliyun.log.producer.errors.LogSizeTooLargeException;
 import com.aliyun.openservices.aliyun.log.producer.errors.ProducerException;
 import com.aliyun.openservices.aliyun.log.producer.errors.ResultFailedException;
 import com.aliyun.openservices.aliyun.log.producer.errors.TimeoutException;
@@ -41,7 +41,7 @@ public class SampleProducerWithFuture {
       } catch (InterruptedException e) {
         LOGGER.warn("The current thread has been interrupted during send logs.");
       } catch (Exception e) {
-        if (e instanceof LogsTooLargeException) {
+        if (e instanceof LogSizeTooLargeException) {
           LOGGER.error("The size of log is larger than the maximum allowable size, e={}", e);
         } else if (e instanceof TimeoutException) {
           LOGGER.error("The time taken for allocating memory for the logs has surpassed., e={}", e);
