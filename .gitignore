@@ -2,6 +2,7 @@
 local_env
 local_env2
 .local_producerrc
+.local_producerrc2
 pics/
 target/
 .DS_Store
