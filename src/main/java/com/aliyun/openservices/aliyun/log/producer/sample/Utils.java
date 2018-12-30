@@ -2,6 +2,8 @@ package com.aliyun.openservices.aliyun.log.producer.sample;
 
 import com.aliyun.openservices.aliyun.log.producer.*;
 import com.aliyun.openservices.log.common.LogItem;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +41,14 @@ public class Utils {
     logItem.PushBack("key1", generateStr(10));
     logItem.PushBack("key2", generateStr(10));
     return logItem;
+  }
+
+  public static List<LogItem> generateLogItems(int n) {
+    List<LogItem> logItems = new ArrayList<LogItem>();
+    for (int i = 0; i < n; ++i) {
+      logItems.add(generateLogItem(i));
+    }
+    return logItems;
   }
 
   private static String generateStr(int len) {
