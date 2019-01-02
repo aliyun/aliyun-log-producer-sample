@@ -8,10 +8,8 @@ import com.aliyun.openservices.aliyun.log.producer.ProjectConfig;
 import com.aliyun.openservices.aliyun.log.producer.ProjectConfigs;
 import com.aliyun.openservices.aliyun.log.producer.Result;
 import com.aliyun.openservices.aliyun.log.producer.errors.ProducerException;
-import com.aliyun.openservices.aliyun.log.producer.internals.LogSizeCalculator;
 import com.aliyun.openservices.log.common.LogItem;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,6 +21,8 @@ public class SamplePerformance {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SampleProducerWithCallback.class);
 
+  private static final Random random = new Random();
+
   public static void main(String[] args) throws InterruptedException {
     final String project = System.getenv("PROJECT");
     final String logStore = System.getenv("LOG_STORE");
@@ -32,7 +32,6 @@ public class SamplePerformance {
     int sendThreadCount = Integer.valueOf(System.getenv("SEND_THREAD_COUNT"));
     int ioThreadCount = Integer.valueOf(System.getenv("IO_THREAD_COUNT"));
     final int times = Integer.valueOf(System.getenv("TIMES"));
-    final int logsCountInSend = Integer.valueOf(System.getenv("LOGS_COUNT_IN_SEND"));
     LOGGER.info(
         "project={}, logStore={}, endpoint={}, sendThreadCount={}, ioThreadCount={}, times={}",
         project,
@@ -42,8 +41,6 @@ public class SamplePerformance {
         ioThreadCount,
         times);
     ExecutorService executorService = Executors.newFixedThreadPool(sendThreadCount);
-    int logSizeInBytes = LogSizeCalculator.calculate(getLogItem());
-    LOGGER.info("logSizeInBytes={}", logSizeInBytes);
     LOGGER.info("availableProcessors={}", Runtime.getRuntime().availableProcessors());
 
     ProjectConfigs projectConfigs = new ProjectConfigs();
@@ -63,37 +60,21 @@ public class SamplePerformance {
             public void run() {
               try {
                 for (int i = 0; i < times; ++i) {
-                  if (logsCountInSend == 1) {
-                    producer.send(
-                        project,
-                        logStore,
-                        getTopic(i),
-                        getSource(i),
-                        getLogItem(),
-                        new Callback() {
-                          @Override
-                          public void onCompletion(Result result) {
-                            if (result.isSuccessful()) {
-                              successCount.incrementAndGet();
-                            }
+                  int r = random.nextInt(times);
+                  producer.send(
+                      project,
+                      logStore,
+                      getTopic(r),
+                      getSource(r),
+                      getLogItem(r),
+                      new Callback() {
+                        @Override
+                        public void onCompletion(Result result) {
+                          if (result.isSuccessful()) {
+                            successCount.incrementAndGet();
                           }
-                        });
-                  } else {
-                    producer.send(
-                        project,
-                        logStore,
-                        getTopic(i),
-                        getSource(i),
-                        getLogItems(logsCountInSend),
-                        new Callback() {
-                          @Override
-                          public void onCompletion(Result result) {
-                            if (result.isSuccessful()) {
-                              successCount.incrementAndGet();
-                            }
-                          }
-                        });
-                  }
+                        }
+                      });
                 }
               } catch (Exception e) {
                 LOGGER.error("Failed to send log, e=", e);
@@ -113,13 +94,9 @@ public class SamplePerformance {
     long t2 = System.currentTimeMillis();
     LOGGER.info("Test end.");
     LOGGER.info("======Summary======");
-    long totalSizeInBytes = (long) sendThreadCount * times * logsCountInSend * logSizeInBytes;
-    LOGGER.info("Total count " + sendThreadCount * times * logsCountInSend + ".");
-    LOGGER.info("Total size " + totalSizeInBytes + " bytes.");
+    LOGGER.info("Total count " + sendThreadCount * times + ".");
     long timeCost = t2 - t1;
     LOGGER.info("Time cost " + timeCost + " millis");
-    double throughput = (totalSizeInBytes * 1.0 * 1000) / (timeCost * 1024 * 1024);
-    LOGGER.info("Throughput " + throughput + " MB/s");
     try {
       producer.close();
     } catch (ProducerException e) {
@@ -128,36 +105,24 @@ public class SamplePerformance {
     executorService.shutdown();
   }
 
-  private static LogItem getLogItem() {
+  private static LogItem getLogItem(int r) {
     LogItem logItem = new LogItem();
-    logItem.PushBack("key-00", "value-00");
-    logItem.PushBack("key-01", "value-01");
-    logItem.PushBack("key-02", "value-02");
-    logItem.PushBack("key-03", "value-03");
-    logItem.PushBack("key-04", "value-04");
-    logItem.PushBack("key-05", "value-05");
-    logItem.PushBack("key-06", "value-06");
-    logItem.PushBack("key-07", "value-07");
-    logItem.PushBack("key-08", "value-08");
-    logItem.PushBack("key-09", "value-09");
-    logItem.PushBack("key-10", "value-10");
-    logItem.PushBack("key-11", "value-11");
+    logItem.PushBack("content_key_1", "1abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_" + r);
+    logItem.PushBack("content_key_2", "1abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_" + r);
+    logItem.PushBack("content_key_3", "1abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_" + r);
+    logItem.PushBack("content_key_4", "1abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_" + r);
+    logItem.PushBack("content_key_5", "1abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_" + r);
+    logItem.PushBack("content_key_6", "1abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_" + r);
+    logItem.PushBack("content_key_7", "1abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_" + r);
+    logItem.PushBack("content_key_8", "1abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_" + r);
     return logItem;
   }
 
-  private static List<LogItem> getLogItems(int n) {
-    List<LogItem> logItems = new ArrayList<LogItem>(n);
-    for (int i = 0; i < n; ++i) {
-      logItems.add(getLogItem());
-    }
-    return logItems;
+  private static String getTopic(int r) {
+    return "topic-" + r % 5;
   }
 
-  private static String getTopic(int i) {
-    return "t-" + i % 4;
-  }
-
-  private static String getSource(int i) {
-    return "s-" + i % 5;
+  private static String getSource(int r) {
+    return "source-" + r % 10;
   }
 }
