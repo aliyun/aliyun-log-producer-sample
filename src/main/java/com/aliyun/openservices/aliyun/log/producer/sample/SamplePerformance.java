@@ -32,21 +32,22 @@ public class SamplePerformance {
     int sendThreadCount = Integer.valueOf(System.getenv("SEND_THREAD_COUNT"));
     int ioThreadCount = Integer.valueOf(System.getenv("IO_THREAD_COUNT"));
     final int times = Integer.valueOf(System.getenv("TIMES"));
+    int totalSizeInBytes = Integer.valueOf(System.getenv("TOTAL_SIZE_IN_BYTES"));
     LOGGER.info(
-        "project={}, logStore={}, endpoint={}, sendThreadCount={}, ioThreadCount={}, times={}",
+        "project={}, logStore={}, endpoint={}, sendThreadCount={}, ioThreadCount={}, times={}, totalSizeInBytes={}",
         project,
         logStore,
         endpoint,
         sendThreadCount,
         ioThreadCount,
-        times);
+        times,
+        totalSizeInBytes);
     ExecutorService executorService = Executors.newFixedThreadPool(sendThreadCount);
-    LOGGER.info("availableProcessors={}", Runtime.getRuntime().availableProcessors());
-
     ProjectConfigs projectConfigs = new ProjectConfigs();
     projectConfigs.put(new ProjectConfig(project, endpoint, accessKeyId, accessKeySecret));
     ProducerConfig producerConfig = new ProducerConfig(projectConfigs);
     producerConfig.setIoThreadCount(ioThreadCount);
+    producerConfig.setTotalSizeInBytes(totalSizeInBytes);
 
     final Producer producer = new LogProducer(producerConfig);
     final AtomicInteger successCount = new AtomicInteger(0);
@@ -89,7 +90,7 @@ public class SamplePerformance {
       if (successCount.get() == sendThreadCount * times) {
         break;
       }
-      Thread.sleep(1000);
+      Thread.sleep(100);
     }
     long t2 = System.currentTimeMillis();
     LOGGER.info("Test end.");
