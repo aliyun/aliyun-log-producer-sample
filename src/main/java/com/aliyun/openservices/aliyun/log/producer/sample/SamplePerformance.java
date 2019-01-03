@@ -30,17 +30,17 @@ public class SamplePerformance {
     final String accessKeyId = System.getenv("ACCESS_KEY_ID");
     final String accessKeySecret = System.getenv("ACCESS_KEY_SECRET");
     int sendThreadCount = Integer.valueOf(System.getenv("SEND_THREAD_COUNT"));
-    int ioThreadCount = Integer.valueOf(System.getenv("IO_THREAD_COUNT"));
     final int times = Integer.valueOf(System.getenv("TIMES"));
+    int ioThreadCount = Integer.valueOf(System.getenv("IO_THREAD_COUNT"));
     int totalSizeInBytes = Integer.valueOf(System.getenv("TOTAL_SIZE_IN_BYTES"));
     LOGGER.info(
-        "project={}, logStore={}, endpoint={}, sendThreadCount={}, ioThreadCount={}, times={}, totalSizeInBytes={}",
+        "project={}, logStore={}, endpoint={}, sendThreadCount={}, times={}, ioThreadCount={}, totalSizeInBytes={}",
         project,
         logStore,
         endpoint,
         sendThreadCount,
-        ioThreadCount,
         times,
+        ioThreadCount,
         totalSizeInBytes);
     ExecutorService executorService = Executors.newFixedThreadPool(sendThreadCount);
     ProjectConfigs projectConfigs = new ProjectConfigs();
