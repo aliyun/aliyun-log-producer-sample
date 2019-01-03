@@ -65,9 +65,9 @@ public class SamplePerformance {
                   producer.send(
                       project,
                       logStore,
-                      getTopic(r),
-                      getSource(r),
-                      getLogItem(r),
+                      generateTopic(r),
+                      generateSource(r),
+                      generateLogItem(r),
                       new Callback() {
                         @Override
                         public void onCompletion(Result result) {
@@ -106,7 +106,7 @@ public class SamplePerformance {
     executorService.shutdown();
   }
 
-  private static LogItem getLogItem(int r) {
+  private static LogItem generateLogItem(int r) {
     LogItem logItem = new LogItem();
     logItem.PushBack("content_key_1", "1abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_" + r);
     logItem.PushBack("content_key_2", "2abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_" + r);
@@ -119,11 +119,11 @@ public class SamplePerformance {
     return logItem;
   }
 
-  private static String getTopic(int r) {
+  private static String generateTopic(int r) {
     return "topic-" + r % 5;
   }
 
-  private static String getSource(int r) {
+  private static String generateSource(int r) {
     return "source-" + r % 10;
   }
 }
