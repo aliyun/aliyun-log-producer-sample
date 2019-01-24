@@ -51,6 +51,8 @@ mvn exec:java -Dexec.mainClass="com.aliyun.openservices.aliyun.log.producer.samp
 mvn exec:java -Dexec.mainClass="com.aliyun.openservices.aliyun.log.producer.sample.SampleProducerWithFuture"
 ```
 
+关于 SamplePerformance 的运行方式请参考文档 [SamplePerformance 运行步骤](https://github.com/aliyun/aliyun-log-producer-sample/blob/master/PERF_README_CN.md)。
+
 ## 相关资料
 * [日志上云利器 - Aliyun LOG Java Producer](https://yq.aliyun.com/articles/682762)
 * [Aliyun LOG Java Producer 快速入门](https://yq.aliyun.com/articles/682761)
