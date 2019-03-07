@@ -46,6 +46,8 @@ public class SamplePerformance {
     ProjectConfigs projectConfigs = new ProjectConfigs();
     projectConfigs.put(new ProjectConfig(project, endpoint, accessKeyId, accessKeySecret));
     ProducerConfig producerConfig = new ProducerConfig(projectConfigs);
+    producerConfig.setMaxBatchSizeInBytes(3 * 1024 * 1024);
+    producerConfig.setMaxBatchCount(40960);
     producerConfig.setIoThreadCount(ioThreadCount);
     producerConfig.setTotalSizeInBytes(totalSizeInBytes);
 
