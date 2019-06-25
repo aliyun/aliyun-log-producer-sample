@@ -17,14 +17,10 @@ public class Utils {
   private static final String CHARS = "abcdefghijklmnopqrstuvwxyz";
 
   public static Producer createProducer() {
-    ProducerConfig producerConfig = new ProducerConfig(buildProjectConfigs());
-    return new LogProducer(producerConfig);
-  }
-
-  private static ProjectConfigs buildProjectConfigs() {
-    ProjectConfigs projectConfigs = new ProjectConfigs();
-    projectConfigs.put(buildProjectConfig());
-    return projectConfigs;
+    ProducerConfig producerConfig = new ProducerConfig();
+    Producer producer = new LogProducer(producerConfig);
+    producer.putProjectConfig(buildProjectConfig());
+    return producer;
   }
 
   private static ProjectConfig buildProjectConfig() {

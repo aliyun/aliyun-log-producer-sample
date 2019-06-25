@@ -5,7 +5,6 @@ import com.aliyun.openservices.aliyun.log.producer.LogProducer;
 import com.aliyun.openservices.aliyun.log.producer.Producer;
 import com.aliyun.openservices.aliyun.log.producer.ProducerConfig;
 import com.aliyun.openservices.aliyun.log.producer.ProjectConfig;
-import com.aliyun.openservices.aliyun.log.producer.ProjectConfigs;
 import com.aliyun.openservices.aliyun.log.producer.Result;
 import com.aliyun.openservices.aliyun.log.producer.errors.ProducerException;
 import com.aliyun.openservices.log.common.LogItem;
@@ -43,15 +42,15 @@ public class SamplePerformance {
         ioThreadCount,
         totalSizeInBytes);
     ExecutorService executorService = Executors.newFixedThreadPool(sendThreadCount);
-    ProjectConfigs projectConfigs = new ProjectConfigs();
-    projectConfigs.put(new ProjectConfig(project, endpoint, accessKeyId, accessKeySecret));
-    ProducerConfig producerConfig = new ProducerConfig(projectConfigs);
+    ProducerConfig producerConfig = new ProducerConfig();
     producerConfig.setBatchSizeThresholdInBytes(3 * 1024 * 1024);
     producerConfig.setBatchCountThreshold(40960);
     producerConfig.setIoThreadCount(ioThreadCount);
     producerConfig.setTotalSizeInBytes(totalSizeInBytes);
 
     final Producer producer = new LogProducer(producerConfig);
+    producer.putProjectConfig(new ProjectConfig(project, endpoint, accessKeyId, accessKeySecret));
+
     final AtomicInteger successCount = new AtomicInteger(0);
     final CountDownLatch latch = new CountDownLatch(sendThreadCount);
     LOGGER.info("Test started.");
