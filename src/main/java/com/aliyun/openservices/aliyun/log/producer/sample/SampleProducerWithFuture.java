@@ -23,7 +23,8 @@ public class SampleProducerWithFuture {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SampleProducerWithFuture.class);
 
-  private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
+  private static final ExecutorService EXECUTOR_SERVICE = Executors
+      .newFixedThreadPool(Math.max(Runtime.getRuntime().availableProcessors(), 1));
 
   public static void main(String[] args) throws InterruptedException {
     Producer producer = Utils.createProducer();
