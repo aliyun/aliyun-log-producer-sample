@@ -44,7 +44,7 @@
     <maven.compiler.target>1.6</maven.compiler.target>
     <aliyun-log-producer.version>0.3.9</aliyun-log-producer.version>
     <aliyun-log.version>0.6.56</aliyun-log.version>
-    <protobuf-java.version>2.5.0</protobuf-java.version>
+    <protobuf-java.version>3.16.1</protobuf-java.version>
     <logback.version>1.2.3</logback.version>
   </properties>
 
